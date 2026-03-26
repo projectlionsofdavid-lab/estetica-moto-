@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Estética Auto — Registrar Atendimento</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600&display=swap');
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #0f0f1a; font-family: 'DM Sans', sans-serif; min-height: 100vh; padding: 24px 16px 48px; color: #fff; }
+
+  .header { text-align: center; margin-bottom: 28px; }
+  .logo { font-family: 'Bebas Neue', sans-serif; font-size: 28px; color: #FFD700; letter-spacing: 3px; margin-bottom: 4px; }
+  .subtitle { font-size: 12px; color: rgba(255,255,255,0.4); letter-spacing: 1.5px; text-transform: uppercase; }
+
+  .card { background: #1a1a2e; border-radius: 20px; padding: 24px; max-width: 440px; margin: 0 auto; border: 1px solid rgba(255,215,0,0.1); }
+
+  .service-badge {
+    background: rgba(255,215,0,0.08);
+    border: 1px solid rgba(255,215,0,0.2);
+    border-radius: 14px;
+    padding: 16px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+  .service-name { font-size: 15px; font-weight: 500; color: #fff; }
+  .service-sub { font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 2px; }
+  .service-price { font-family: 'Bebas Neue', sans-serif; font-size: 30px; color: #FFD700; }
+
+  .section-title { font-size: 11px; color: rgba(255,255,255,0.35); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 14px; padding-bottom: 8px; border-bottom: 1px solid rgba(255,255,255,0.06); }
+
+  .field { margin-bottom: 16px; }
+  label { display: block; font-size: 12px; color: rgba(255,255,255,0.5); margin-bottom: 6px; letter-spacing: 0.5px; }
+  input { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; color: #fff; font-family: 'DM Sans', sans-serif; font-size: 15px; padding: 12px 14px; outline: none; transition: border-color .2s; -webkit-appearance: none; }
+  input:focus { border-color: rgba(255,215,0,0.4); }
+
+  .cashback-row {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 20px 0;
+  }
+  .cb-box { background: rgba(255,255,255,0.04); border-radius: 12px; padding: 14px; text-align: center; border: 1px solid rgba(255,255,255,0.06); }
+  .cb-pct { font-family: 'Bebas Neue', sans-serif; font-size: 30px; line-height: 1; }
+  .cb-label { font-size: 10px; color: rgba(255,255,255,0.4); margin-top: 4px; line-height: 1.4; }
+  .cb-box.blue .cb-pct { color: #4e9ff5; }
+  .cb-box.red .cb-pct { color: #e94560; }
+
+  .ind-toggle { display: flex; align-items: center; gap: 10px; padding: 14px; background: rgba(255,255,255,0.03); border-radius: 10px; border: 1px solid rgba(255,255,255,0.07); cursor: pointer; margin-bottom: 16px; }
+  .toggle-switch { width: 40px; height: 22px; background: rgba(255,255,255,0.1); border-radius: 11px; position: relative; transition: background .2s; flex-shrink: 0; }
+  .toggle-switch.on { background: #e94560; }
+  .toggle-switch::after { content: ''; position: absolute; width: 16px; height: 16px; background: #fff; border-radius: 50%; top: 3px; left: 3px; transition: transform .2s; }
+  .toggle-switch.on::after { transform: translateX(18px); }
+  .toggle-label { font-size: 13px; color: rgba(255,255,255,0.7); }
+
+  .ind-fields { display: none; }
+  .ind-fields.show { display: block; }
+
+  .btn-submit { width: 100%; padding: 16px; background: #FFD700; color: #0f0f1a; border: none; border-radius: 14px; font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 2px; cursor: pointer; transition: opacity .2s, transform .1s; margin-top: 8px; }
+  .btn-submit:active { transform: scale(0.98); opacity: 0.9; }
+  .btn-submit:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .success-msg { display: none; background: rgba(46,204,113,0.1); border: 1px solid rgba(46,204,113,0.3); border-radius: 14px; padding: 24px; text-align: center; margin-top: 16px; }
+  .success-msg.show { display: block; }
+  .success-icon { font-size: 36px; margin-bottom: 8px; }
+  .success-title { font-family: 'Bebas Neue', sans-serif; font-size: 24px; color: #2ecc71; letter-spacing: 1px; }
+  .success-sub { font-size: 13px; color: rgba(255,255,255,0.5); margin-top: 6px; line-height: 1.5; }
+
+  .webhook-config { max-width: 440px; margin: 16px auto 0; background: rgba(255,255,255,0.03); border-radius: 12px; padding: 14px 16px; border: 1px dashed rgba(255,255,255,0.1); }
+  .webhook-config label { color: rgba(255,215,0,0.6); font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; }
+  .webhook-config input { font-size: 12px; margin-top: 6px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo">Estética ✦ Moto</div>
+  <div class="subtitle">Registrar Atendimento</div>
+</div>
+
+<div class="card">
+
+  <div class="service-badge">
+    <div>
+      <div class="service-name">Higienização Completa</div>
+      <div class="service-sub">Moto · Serviço único</div>
+    </div>
+    <div class="service-price">R$60</div>
+  </div>
+
+  <div class="section-title">Dados do cliente</div>
+
+  <div class="field">
+    <label>Nome completo</label>
+    <input type="text" id="nome" placeholder="Ex: João Silva" />
+  </div>
+
+  <div class="field">
+    <label>WhatsApp</label>
+    <input type="tel" id="telefone" placeholder="(85) 99999-9999" />
+  </div>
+
+  <div class="field">
+    <label>Data do serviço</label>
+    <input type="date" id="data" />
+  </div>
+
+  <div class="cashback-row">
+    <div class="cb-box blue">
+      <div class="cb-pct">10%</div>
+      <div class="cb-label">Desconto na próxima higienização</div>
+    </div>
+    <div class="cb-box red">
+      <div class="cb-pct">R$6</div>
+      <div class="cb-label">Equivale a R$6 de desconto</div>
+    </div>
+  </div>
+
+  <div class="section-title">Indicação</div>
+
+  <div class="ind-toggle" onclick="toggleInd()">
+    <div class="toggle-switch" id="toggleBtn"></div>
+    <div class="toggle-label">Veio por indicação de alguém?</div>
+  </div>
+
+  <div class="ind-fields" id="indFields">
+    <div class="field">
+      <label>Nome do indicador</label>
+      <input type="text" id="indicador" placeholder="Quem indicou?" />
+    </div>
+    <div class="field">
+      <label>WhatsApp do indicador</label>
+      <input type="tel" id="telIndicador" placeholder="(85) 99999-9999" />
+    </div>
+  </div>
+
+  <button class="btn-submit" id="btnEnviar" onclick="enviar()">REGISTRAR ATENDIMENTO</button>
+
+  <div class="success-msg" id="successMsg">
+    <div class="success-icon">✓</div>
+    <div class="success-title">Registrado!</div>
+    <div class="success-sub" id="successSub"></div>
+  </div>
+
+</div>
+
+<div class="webhook-config">
+  <label>URL do Webhook n8n</label>
+  <input type="url" id="webhookUrl" placeholder="https://seu-n8n.com/webhook/cashback" />
+</div>
+
+<script>
+  document.getElementById('data').valueAsDate = new Date();
+
+  let indAtivo = false;
+
+  function toggleInd() {
+    indAtivo = !indAtivo;
+    document.getElementById('toggleBtn').classList.toggle('on', indAtivo);
+    document.getElementById('indFields').classList.toggle('show', indAtivo);
+  }
+
+  function maskPhone(input) {
+    input.addEventListener('input', function() {
+      let v = this.value.replace(/\D/g,'');
+      v = v.replace(/^(\d{2})(\d)/,'($1) $2');
+      v = v.replace(/(\d{5})(\d)/,'$1-$2');
+      this.value = v;
+    });
+  }
+  maskPhone(document.getElementById('telefone'));
+  maskPhone(document.getElementById('telIndicador'));
+
+  async function enviar() {
+    const nome = document.getElementById('nome').value.trim();
+    const tel = document.getElementById('telefone').value.trim();
+    const data = document.getElementById('data').value;
+    const webhookUrl = document.getElementById('webhookUrl').value.trim();
+
+    if (!nome || !tel) { alert('Preencha nome e telefone.'); return; }
+    if (!webhookUrl) { alert('Configure a URL do Webhook n8n.'); return; }
+
+    const payload = {
+      nome,
+      telefone: tel,
+      servico: 'Higienização Completa',
+      tipo_veiculo: 'Moto',
+      valor: 60,
+      cashback_percentual: 10,
+      cashback_valor: 6,
+      cashback_validade_dias: 30,
+      data,
+      foi_indicado: indAtivo,
+      indicador_nome: indAtivo ? document.getElementById('indicador').value.trim() : '',
+      indicador_telefone: indAtivo ? document.getElementById('telIndicador').value.trim() : '',
+      timestamp: new Date().toISOString()
+    };
+
+    const btn = document.getElementById('btnEnviar');
+    btn.disabled = true;
+    btn.textContent = 'ENVIANDO...';
+
+    try {
+      await fetch(webhookUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      document.getElementById('successMsg').classList.add('show');
+      let msg = `WhatsApp enviado para ${tel}!`;
+      if (indAtivo) msg += `\nIndicador notificado também! +5% creditado.`;
+      document.getElementById('successSub').textContent = msg;
+      btn.textContent = 'NOVO ATENDIMENTO';
+      btn.disabled = false;
+      btn.onclick = () => location.reload();
+
+    } catch(e) {
+      alert('Erro ao enviar. Verifique a URL do webhook.');
+      btn.disabled = false;
+      btn.textContent = 'REGISTRAR ATENDIMENTO';
+    }
+  }
+</script>
+</body>
+</html>
